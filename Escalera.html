@@ -13,50 +13,60 @@
 <!--- https://ajax.googleapis.com/ajax/libs/threejs/r76/three.min.js -->
 <script src = "https://cdnjs.cloudflare.com/ajax/libs/three.js/95/three.min.js"> </script>
 <script>
+//Creacion de variables
 var camera, scene, renderer;
 var geometria, material, mesh;
 var clock;
-
+//Funcion Cubo, donde se crea cada objeto
 function cubo(x, y, z, px, py, pz, material, color, wf) 
 {
 	geometria = new THREE.CubeGeometry(x, y, z);
-    switch(material) {
+    switch(material) 
+	{
+		//Casos para elegir el Material del cubo
     	case 'Basic': material = new THREE.MeshBasicMaterial({color: color, wireframe: wf}); break;
     	case 'Standard': material = new THREE.MeshStandardMaterial({color: color, wireframe: wf}); break;
     	case 'Physical': material = new THREE.MesPhysicalMaterial({color: color, wireframe: wf}); break;
     	case 'Phong': material = new THREE.MeshPhongMaterial({color: color, wireframe: wf}); break;
     	case 'Lambert': material = new THREE.MeshLambertMaterial({color: color, wireframe: wf}); break;
     }
+	//Creacion del cubo
     cube = new THREE.Mesh(geometria, material);
+	//Añade el cubo a la escena y le da la posicion en el origen
     scene.add(cube);
     cube.position.set(px, py, pz);
 
     return cube;
 }
-
+//Funcion principal
 function init() 
 {
+	//Creacion y renderizado de la escena
     renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth*0.99, window.innerHeight*0.99);
     document.body.appendChild(renderer.domElement);
     scene = new THREE.Scene();
+	//Arreglo de cubos y la cantidad de cubos a crear
     var arrCube = [];
-	var numCubos= 25;
-
-    var t = 1;
+	var numCubos= 3;
+	//Variable t para el tamaño de los cubos
+    var t = 2;
+	//For para la creacion de cubos
     for (var i = 0; i < numCubos+1; i++) 
 	{
         d = t * 1.05
+		//Añade los cubos al arreglo, dejandolo en el origen
         arrCube.push(cubo(t, t, t, 0, 0, 0, 'Basic', (i==0 ? 'red': i==1 ? 'green' : 'blue'), false));
-		arrCube[i].geometry.translate(0,-i,-i);
+		//Traslacion del cubo hacia arriba y hacia atras
+		arrCube[i].geometry.translate(0*d,-i*d,-i*d);
+		//Rotacion del cubo para crear la escalera
 		arrCube[i].geometry.rotateX((Math.PI / 2));
-       //arrCube[i].geometry.translate((i==0)*d, (i==1)*d, (i==2)*d)		
     }
 
-
+	//Ejes coordenados
     const axesHelper = new THREE.AxesHelper(10);
     scene.add(axesHelper);
-
+	//Creacion de la camara para visualizar la escena
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
     camera.position.set(8, 8, 8);
     camera.lookAt(arrCube[0].position);
