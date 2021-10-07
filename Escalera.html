@@ -52,12 +52,12 @@ function init()
 	//Variable t para el tamaño de los cubos
     var t = 2;
 	//For para la creacion de cubos
-    for (var i = 0; i < numCubos+1; i++) 
+    for (var i = 0; i < numCubos; i++) 
 	{
         d = t * 1.05
 		//Añade los cubos al arreglo, dejandolo en el origen
         arrCube.push(cubo(t, t, t, 0, 0, 0, 'Basic', (i==0 ? 'red': i==1 ? 'green' : 'blue'), false));
-		//Traslacion del cubo hacia arriba y hacia atras
+		//Traslacion del cubo  en el eje x, en negativo de y y de z 
 		arrCube[i].geometry.translate(0*d,-i*d,-i*d);
 		//Rotacion del cubo para crear la escalera
 		arrCube[i].geometry.rotateX((Math.PI / 2));
